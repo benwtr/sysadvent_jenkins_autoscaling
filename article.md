@@ -1,7 +1,7 @@
 
 At $lastjob, I configured a cluster of jenkins slaves on EC2 to dynamically autoscale to meet demand during the working day, while scaling down at night and over weekends to cut down on costs.
 
-There is a (plugin)[https://wiki.jenkins-ci.org/display/JENKINS/Amazon+EC2+Plugin] that has very similar functionality, but I wasn't aware of it's existence at the time and it's not as flexible or as much fun.
+There is a [plugin](https://wiki.jenkins-ci.org/display/JENKINS/Amazon+EC2+Plugin) that has very similar functionality, but I wasn't aware of it's existence at the time and it's not as flexible or as much fun.
 
 There were a few fun and interesting ingredients in this recipe:
 * Generating AMIs for the slaves and rolling out slave instances in an autoscaling group with Atlas, Packer, Terraform, and Puppet
