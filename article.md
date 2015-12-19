@@ -67,10 +67,13 @@ Finally, we can dynamically autoscale this thing!
 Tuning autoscaling
 ------------------
 
-Getting dynamic autoscaling right is a bit of a nuanced art. Amazon bills by the instance hour and still charges you for an hour if your instance runs for one minute, you can get burned badly if you are rapidly scaling up and down. You always want to scale up fast, but scale down slow. What I found to be effective was scaling up by increasing DesiredInstances if there are jobs queued. And beginning to scale in once IdleExecutors is >3 for 50 minutes. 
+Getting dynamic autoscaling right is a bit of a nuanced art. Amazon bills by the instance hour and still charges you for an hour if your instance runs for one minute, you can get burned badly and end up with a huge AWS bill if you're not careful. You always want to scale up fast, but scale down slow. What I found to be effective in this situation was scaling up by increasing DesiredInstances if there are jobs queued. And beginning to scale in once IdleExecutors is >3 for 50 minutes.
 
 I set up a CloudWatch graph that had all the metrics for the ASG and the Jenkins slaves in one place--another pleasant side effect of having 1 executor per slave was the effect it had on this graph, it was very easy to visualize and reason about what was going on. For example, I could spot and aim to minimize fluctuations in DesiredInstances that added up to waste, and I could see that someone started up a slave outside of autoscaling because TotalExecutors was 1 higher than DesiredInstances.
 
 Conclusion and lessons learned
 ------------------------------
-TBD
+
+Getting these Jenkins slaves to autoscale was quite a bit of work but it was also a great excuse to learn and experiment. It was a success and saved money immediately, it cut the instance-hours on this group of servers in half and settled the debate about the right statically-set number of slaves to use. It was also surprisingly robust despite the number of moving parts, and the repercussions of any part of this autoscaling scheme being broken weren't terrible.
+
+I learned a ton while working on this and will surely be applying that knowledge to other projects in the future. For example, the next time I'm designing a service that consumes from a message queue I'll add a feature: a "suicide" message can be queued so the service can deal with lifecycle hooks. I've already built other "immutable infrastructure" delivery pipelines for other projects with what I learned.
